@@ -3,11 +3,12 @@
 #include <string.h>
 
 typedef struct{
-    int ID;
+    char ID[20];
     char name[50];
     float GPA;
 } Student;
 
+void showMenu();
 void add(Student **arr, int *size);
 void search(Student *arr, int size);
 void display(int count, Student *people);
@@ -16,18 +17,16 @@ int main(){
 
     Student *people = NULL;
     int count = 0;
-    int option;
+    int option; 
 
     do{
-        printf("\n<----------| MENU |---------->\n\n");
-        printf("(1) Add Student\n");
-        printf("(2) Search Student by ID\n");
-        printf("(3) Display all students\n");
-        printf("(4) Sort Students by GPA\n");
-        printf("(5) Save & Exit\n");
+       
+        showMenu();
 
         printf("Enter the number of the option: ");
         scanf("%d", &option);
+
+        while(getchar() != '\n');
 
         switch(option){
             case 1:
@@ -40,7 +39,7 @@ int main(){
                 display(count, people);
                 break;
             case 5:
-                printf("Exiting...\n");
+                printf("\nEXITING...\n\n");
                 free(people);
                 break;
             default:
@@ -53,16 +52,22 @@ int main(){
     return 0;
 }
 
+void showMenu(){
+    printf("\n<----------| MENU |---------->\n\n");
+    printf("(1) Add Student\n");
+    printf("(2) Search Student by ID\n");
+    printf("(3) Display all students\n");
+    printf("(4) Sort Students by GPA\n");
+    printf("(5) Save & Exit\n");
+}
+
 void add(Student **arr, int *size){
     Student temp;
 
     printf("Enter ID: ");
-    while (scanf("%d", &temp.ID) != 1) {
-        printf("Invalid ID. Enter again: ");
-        while (getchar() != '\n'); // clear buffer
-    }
+    fgets(temp.ID, sizeof(temp.ID), stdin);
+    temp.ID[strcspn(temp.ID, "\n")] = '\0';
 
-    while (getchar() != '\n'); // clear leftover newline
 
     printf("Enter name of the student: ");
     fgets(temp.name, sizeof(temp.name), stdin);
@@ -75,6 +80,7 @@ void add(Student **arr, int *size){
     }
 
     *arr = realloc(*arr, (*size + 1) * sizeof(Student));
+
     if (*arr == NULL) {
         printf("Memory allocation failed!\n");
         exit(1);
@@ -88,13 +94,14 @@ void add(Student **arr, int *size){
 
 
 void search(Student *arr, int size){
+    Student temp;
     int id;
-    printf("Enter ID to search: ");
-    scanf("%d", &id);
+    printf("\nEnter ID to search: ");
+    fgets(temp.ID, sizeof(temp.ID), stdin);
 
     for(int i = 0; i < size; i++){
-        if(arr[i].ID == id){
-            printf("Student found: %d %s %.2f\n", arr[i].ID, arr[i].name, arr[i].GPA);
+        if(arr[i].ID == temp.ID){
+            printf("Student found: %s %s %.2f\n", arr[i].ID, arr[i].name, arr[i].GPA);
             return;
         }
     }
@@ -102,9 +109,9 @@ void search(Student *arr, int size){
 }
 
 void display(int count, Student *people){
-    printf("<-----| List of all Enrolled Students |----->\n");
+    printf("\n<-----| ENROLLED STUDENTS |----->\n");
 
     for(int i = 0; i < count; i++){
-        printf("%d: %d %s %.2f\n", i + 1, people[i].ID, people[i].name, people[i].GPA);
+        printf("%d: %s %s %.2f\n", i + 1, people[i].ID, people[i].name, people[i].GPA);
     }
 }
