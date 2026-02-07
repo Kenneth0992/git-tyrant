@@ -68,7 +68,6 @@ void add(Student **arr, int *size){
     fgets(temp.ID, sizeof(temp.ID), stdin);
     temp.ID[strcspn(temp.ID, "\n")] = '\0';
 
-
     printf("Enter name of the student: ");
     fgets(temp.name, sizeof(temp.name), stdin);
     temp.name[strcspn(temp.name, "\n")] = '\0'; // remove newline
